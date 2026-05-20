@@ -111,6 +111,27 @@ Run `scripts/download_checkpoints.sh` to fetch all available public
 checkpoints. Locally fine-tuned encoders are documented in
 `docs/checkpoint_provenance.md`.
 
+### 3.5 Backdoor Checkpoint and Supporting Files
+
+The poisoned ViT-B/32 checkpoint, the optimised universal trigger, the
+four classification heads, and the merged-model outputs are hosted at:
+
+**https://huggingface.co/zijun11/backdoor-vitb32-cifar100**
+
+The notebook downloads them automatically via `snapshot_download` on the
+first run — no manual setup, no Drive, no token needed. Contents:
+
+| File | Purpose |
+|---|---|
+| `backdoored_full_model.pth` | full backdoored encoder + classifier |
+| `backdoored_vision_model.pth` | encoder weights only |
+| `adversary_task_vector.pth` | task vector form used in merging |
+| `badmerging_enhanced_model.pth` | FI-loss enhanced checkpoint |
+| `merging_output/optimized_trigger.pth` | Stage-1 universal trigger |
+| `merging_output/classification_heads/head_*.pth` | per-task heads |
+| `merging_output/merged_*.pth` | merged models for each algorithm |
+| `merging_output/merging_results.csv` | summary results table |
+
 ### 3.5 Datasets
 
 The four image-classification datasets:
@@ -137,7 +158,10 @@ pip install -r requirements.txt
 jupyter lab notebooks/badmerging_vitb32_cifar100.ipynb
 ```
 
-Run the cells **in order**. Approximate runtimes (Colab T4):
+Run the cells **in order**. The second cell automatically downloads the
+backdoor checkpoint and supporting files from HuggingFace Hub
+(`zijun11/backdoor-vitb32-cifar100`), so no manual setup is needed.
+Approximate runtimes (Colab T4):
 
 | Cell | Time |
 |---|---|
