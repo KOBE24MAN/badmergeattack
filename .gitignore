@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data and checkpoints (too large for git)
+data/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Results (regenerate from scripts)
+results/figures/*.png
+results/figures/*.pdf
+results/tables/*.csv
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+
+# Logs
+*.log
+logs/
+runs/
+wandb/
+
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,42 @@
+# ConvNeXt-Base-W configuration (cross-paradigm CNN test)
+# Larger trigger and more epochs because of gradient attenuation
+# across 36 ConvNeXt blocks.
+
+backbone:
+  name: convnext_base_w
+  source: laion2b_s13b_b82k_augreg
+  loader: open_clip_torch
+
+datasets:
+  tasks: [cifar100, gtsrb, stanford_cars, oxford_pets]
+  victim_task: cifar100
+  target_class: 0
+  image_size: 224
+
+stage1_trigger:
+  trigger_size: [25, 25]
+  trigger_position: right_bottom
+  phi: 40
+  learning_rate: 0.03
+  lr_schedule: cosine
+  lr_min: 0.003
+  epochs: 10
+  head_warmup_epochs: 5
+
+stage2_fi_loss:
+  alpha: 1.0
+  p_min: 0.0
+  p_max: 1.0
+  epochs: 10
+  batch_size: 32
+  optimizer: AdamW
+  learning_rate: 1.0e-5
+
+merging:
+  algorithms: [task_arithmetic, ties, regmean, simple_avg]
+  lambda_sweep: [0.1, 0.3, 0.5, 0.7, 1.0]
+  default_lambda: 0.3
+
+evaluation:
+  metrics: [clean_accuracy, asr]
+  report_per_algorithm: true
