@@ -33,7 +33,9 @@ badmergeattack/
 ├── README.md                  ← you are here
 ├── requirements.txt           ← Python dependencies
 ├── notebooks/
-│   └── badmerging_vitb32_cifar100.ipynb   ← main experiment notebook
+│   ├── badmerging_vitb32_cifar100.ipynb   ← main experiment (reproduction baseline)
+│   ├── badmerging_vitb16_cifar100.ipynb   ← intra-family generalisation
+│   └── badmerging_convnext_cifar100.ipynb ← cross-paradigm CNN evaluation
 ├── configs/
 │   ├── vitb32.yaml            ← hyperparameters for ViT-B/32
 │   ├── vitb16.yaml            ← hyperparameters for ViT-B/16
@@ -158,24 +160,37 @@ pip install -r requirements.txt
 jupyter lab notebooks/badmerging_vitb32_cifar100.ipynb
 ```
 
-Run the cells **in order**. The second cell automatically downloads the
-backdoor checkpoint and supporting files from HuggingFace Hub
-(`zijun11/backdoor-vitb32-cifar100`), so no manual setup is needed.
-Approximate runtimes (Colab T4):
+Three notebooks are provided, one per architecture. Run the cells **in
+order** within each notebook:
 
-| Cell | Time |
-|---|---|
-| Setup & checkpoint download | 5–10 min |
-| Stage 1 trigger optimisation | ~3 min |
-| Stage 2 FI-loss training | ~25 min |
-| Four merging algorithms | ~10 min combined |
-| Evaluation + t-SNE | ~5 min |
-| **Total** | **~1 hour** |
+| Notebook | Architecture | Purpose |
+|---|---|---|
+| `badmerging_vitb32_cifar100.ipynb` | CLIP ViT-B/32 | Reproduction baseline (RQ1) |
+| `badmerging_vitb16_cifar100.ipynb` | CLIP ViT-B/16 | Intra-family generalisation (RQ3) |
+| `badmerging_convnext_cifar100.ipynb` | CLIP ConvNeXt-Base-W | Cross-paradigm CNN evaluation (RQ3) |
+
+The ViT-B/32 notebook automatically downloads the backdoor checkpoint and
+supporting files from HuggingFace Hub
+(`zijun11/backdoor-vitb32-cifar100`), so no manual setup is needed. The
+ViT-B/16 and ConvNeXt notebooks fine-tune their task encoders locally
+inside the notebook itself.
+
+Approximate runtimes per notebook (Colab T4):
+
+| Stage | ViT-B/32 | ViT-B/16 | ConvNeXt |
+|---|---|---|---|
+| Setup & checkpoint / data download | 5–10 min | 5–10 min | 5–10 min |
+| Local fine-tuning of task encoders | — | ~30 min | ~45 min |
+| Stage 1 trigger optimisation | ~3 min | ~5 min | ~15 min |
+| Stage 2 FI-loss training | ~25 min | ~35 min | ~60 min |
+| Four merging algorithms | ~10 min | ~10 min | ~15 min |
+| Evaluation + t-SNE | ~5 min | ~5 min | ~10 min |
+| **Total** | **~1 h** | **~1.5 h** | **~2.5 h** |
 
 ### Option B — Google Colab (zero local setup)
 
-The notebook is Colab-compatible. Upload it to Colab, mount Drive, then
-run all cells.
+All three notebooks are Colab-compatible. Upload them to Colab and run
+all cells.
 
 ---
 
